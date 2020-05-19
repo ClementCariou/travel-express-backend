@@ -13,7 +13,7 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "moleculer-repl": "^0.6.2",
-    "npm-check": "5.9.0"
+    "npm-check": "^5.9.2"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
