@@ -33,9 +33,9 @@ Fields      |Description   |Type
 id          |Identifier    |String
 user        |Transporter   |User Object
 fromLocation|Starting city |String
-fromDate    |Starting date |Date / time
+fromDate    |Starting date |Date time UTC
 toLocation  |Ending city   |String
-toDate      |Ending date   |Date / time
+toDate      |Ending date   |Date time UTC
 repeat      |Frequency     |[no, daily, weekly, monthly]
 
 ```http
@@ -44,6 +44,23 @@ GET /trip/:id         # detail
 POST /trip            # create [auth]
 PUT /trip/:id         # update [auth]
 DELETE /trip/:id      # delete [auth]
+```
+
+Search query with optionnal fields :
+
+```http
+GET /trip?
+    minFromDate=
+    &maxFromDate=
+    &minToDate=
+    &maxToDate=
+    &fromLocation=
+    &toLocation=
+    &minSeats=        # min val
+    &minBaggages=     # min val
+    &minTalk=
+    &maxTalk=
+    &smoke=
 ```
 
 ## Reservation
