@@ -1,13 +1,13 @@
-# Travel express API
+# trip express API
 
 ## User
 
-Fields   |Description   |Type 
----------|--------------|---
+Fields   |Description   |Type|Access
+---------|--------------|---|---
 id       |Identifier    |String
 mail     |Email address |String mail format
 tel      |Phone number  |String tel format
-password |Hashed password|String min 6
+password |Hashed password|String min 6 | private
 firstName|First name    |String min 2
 lastName |Last name     |String min 2
 vehicle  |Vehicle model |String optional
@@ -26,7 +26,7 @@ POST /user/login|mail, password|token
 PUT /user/:id|user id and fields to update|
 DELETE /user/:id|user id|
 
-## Travel
+## Trip
 
 Fields      |Description   |Type 
 ------------|--------------|---
@@ -36,14 +36,14 @@ fromLocation|Starting city |String
 fromDate    |Starting date |Date / time
 toLocation  |Ending city   |String
 toDate      |Ending date   |Date / time
-repeat      |Frequency     |[no, daily, weekly, mounthly]
+repeat      |Frequency     |[no, daily, weekly, monthly]
 
 ```http
-GET /travel             # list
-GET /travel/:id         # detail
-POST /travel            # create [auth]
-PUT /travel/:id         # update [auth]
-DELETE /travel/:id      # delete [auth]
+GET /trip             # list
+GET /trip/:id         # detail
+POST /trip            # create [auth]
+PUT /trip/:id         # update [auth]
+DELETE /trip/:id      # delete [auth]
 ```
 
 ## Reservation
@@ -52,7 +52,7 @@ DELETE /travel/:id      # delete [auth]
 Fields      |Description   |Type 
 ------------|--------------|---
 id          |Identifier    |String
-travel      |Target travel |Travel Object
+trip      |Target trip |trip Object
 user        |Who reserve   |User Object
 seats       |Amount of seat|[1-10]
 paid        |Is paid       | Boolean
