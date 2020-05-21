@@ -26,6 +26,9 @@ POST /user/login|mail, password|token
 PUT /user/:id|user id and fields to update|
 DELETE /user/:id|user id|
 
+Note:
+- The JSON Web Token has to be passed into the authorization header for the [auth] requests
+
 ## Trip
 
 Fields      |Description   |Type 
@@ -33,13 +36,16 @@ Fields      |Description   |Type
 id          |Identifier    |String
 user        |Transporter   |User Object
 fromLocation|Starting city |String
-fromDate    |Starting date |Date time UTC
+fromDate    |Starting date |Date time
 toLocation  |Ending city   |String
-toDate      |Ending date   |Date time UTC
+toDate      |Ending date   |Date time
 repeat      |Frequency     |[no, daily, weekly, monthly]
+endRepeat   |end repeat date|Date time
 
 ```http
+GET /location         # location list
 GET /trip             # list
+GET /trip?...         # search
 GET /trip/:id         # detail
 POST /trip            # create [auth]
 PUT /trip/:id         # update [auth]
@@ -63,13 +69,17 @@ GET /trip?
     &smoke=
 ```
 
+Note :
+- Date time are formated as number of milliseconds since January 1 1970
+- Trip are repeated when list/search queried with updated from/to date
+
 ## Reservation
 
 
 Fields      |Description   |Type 
 ------------|--------------|---
 id          |Identifier    |String
-trip      |Target trip |Trip Object
+trip        |Target trip   |Trip Object
 user        |Who reserve   |User Object
 seats       |Amount of seat|[1-10]
 paid        |Is paid       | Boolean
