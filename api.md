@@ -1,4 +1,4 @@
-# trip express API
+# Travel express API
 
 ## User
 
@@ -52,7 +52,7 @@ DELETE /trip/:id      # delete [auth]
 Fields      |Description   |Type 
 ------------|--------------|---
 id          |Identifier    |String
-trip      |Target trip |trip Object
+trip      |Target trip |Trip Object
 user        |Who reserve   |User Object
 seats       |Amount of seat|[1-10]
 paid        |Is paid       | Boolean
