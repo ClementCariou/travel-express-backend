@@ -10,7 +10,7 @@ module.exports = {
 		DbService("comments"),
 		CacheCleanerMixin([
 			"cache.clean.comments",
-			"cache.clean.users",
+			"cache.clean.user",
 			"cache.clean.follows",
 			"cache.clean.articles",
 		])
@@ -22,7 +22,7 @@ module.exports = {
 		fields: ["_id", "author", "article", "body", "createdAt", "updatedAt"],
 		populates: {
 			"author": {
-				action: "users.get",
+				action: "user.get",
 				params: {
 					fields: ["_id", "username", "bio", "image"]
 				}
@@ -86,9 +86,11 @@ module.exports = {
 			auth: "required",
 			params: {
 				id: { type: "string" },
-				comment: { type: "object", props: {
-					body: { type: "string", min: 1 },
-				} }
+				comment: {
+					type: "object", props: {
+						body: { type: "string", min: 1 },
+					}
+				}
 			},
 			async handler(ctx) {
 				let newData = ctx.params.comment;

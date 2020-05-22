@@ -9,11 +9,11 @@ const DbService = require("../mixins/db.mixin");
 const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 module.exports = {
-	name: "users",
+	name: "user",
 	mixins: [
-		DbService("users"),
+		DbService("user"),
 		CacheCleanerMixin([
-			"cache.clean.users",
+			"cache.clean.user",
 			"cache.clean.follows",
 		])
 	],
@@ -53,7 +53,7 @@ module.exports = {
 		 * @returns {Object} Created entity & token
 		 */
 		create: {
-			rest: "POST /users",
+			rest: "POST /user",
 			params: {
 				user: { type: "object" }
 			},
@@ -94,7 +94,7 @@ module.exports = {
 		 * @returns {Object} Logged in user with token
 		 */
 		login: {
-			rest: "POST /users/login",
+			rest: "POST /user/login",
 			params: {
 				user: {
 					type: "object", props: {
@@ -225,19 +225,19 @@ module.exports = {
 		},
 
 		list: {
-			rest: "GET /users"
+			rest: "GET /user"
 		},
 
 		get: {
-			rest: "GET /users/:id"
+			rest: "GET /user/:id"
 		},
 
 		update: {
-			rest: "PUT /users/:id"
+			rest: "PUT /user/:id"
 		},
 
 		remove: {
-			rest: "DELETE /users/:id"
+			rest: "DELETE /user/:id"
 		},
 
 

@@ -77,13 +77,13 @@ services:
       - redis
       - mongo
 
-  users:
+  user:
     build:
       context: .
     image: travel
     env_file: docker-compose.env
     environment:
-      SERVICES: users
+      SERVICES: user
     links:
       - redis
       - mongo

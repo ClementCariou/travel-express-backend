@@ -9,7 +9,7 @@ module.exports = {
 	mixins: [
 		DbService("follows"),
 		CacheCleanerMixin([
-			"cache.clean.users",
+			"cache.clean.user",
 			"cache.clean.follows",
 		])
 	],

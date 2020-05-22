@@ -11,7 +11,7 @@ module.exports = {
 		DbService("favorites"),
 		CacheCleanerMixin([
 			"cache.clean.articles",
-			"cache.clean.users",
+			"cache.clean.user",
 			"cache.clean.favorites",
 		])
 	],

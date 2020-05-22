@@ -14,7 +14,7 @@ module.exports = {
 		DbService("articles"),
 		CacheCleanerMixin([
 			"cache.clean.articles",
-			"cache.clean.users",
+			"cache.clean.user",
 			"cache.clean.comments",
 			"cache.clean.follows",
 			"cache.clean.favorites",
@@ -32,7 +32,7 @@ module.exports = {
 		// Populates
 		populates: {
 			author: {
-				action: "users.get",
+				action: "user.get",
 				params: {
 					fields: ["username", "bio", "image"]
 				}
@@ -117,12 +117,14 @@ module.exports = {
 			rest: "PUT /:id",
 			params: {
 				id: { type: "string" },
-				article: { type: "object", props: {
-					title: { type: "string", min: 1, optional: true },
-					description: { type: "string", min: 1, optional: true },
-					body: { type: "string", min: 1, optional: true },
-					tagList: { type: "array", items: "string", optional: true },
-				} }
+				article: {
+					type: "object", props: {
+						title: { type: "string", min: 1, optional: true },
+						description: { type: "string", min: 1, optional: true },
+						body: { type: "string", min: 1, optional: true },
+						tagList: { type: "array", items: "string", optional: true },
+					}
+				}
 			},
 			async handler(ctx) {
 				let newData = ctx.params.article;
@@ -185,22 +187,22 @@ module.exports = {
 				let countParams;
 
 				if (ctx.params.tag)
-					params.query.tagList = { "$in" : [ctx.params.tag] };
+					params.query.tagList = { "$in": [ctx.params.tag] };
 
 				/*
 				if (ctx.params.author) {
-					const users = await ctx.call("users.find", { query: { username: ctx.params.author } });
-					if (users.length == 0)
+					const user = await ctx.call("user.find", { query: { username: ctx.params.author } });
+					if (user.length == 0)
 						throw new MoleculerClientError("Author not found");
 
-					params.query.author = users[0]._id;
+					params.query.author = user[0]._id;
 				}
 				if (ctx.params.favorited) {
-					const users = await ctx.call("users.find", { query: { username: ctx.params.favorited } });
-					if (users.length == 0)
+					const user = await ctx.call("user.find", { query: { username: ctx.params.favorited } });
+					if (user.length == 0)
 						throw new MoleculerClientError("Author not found");
 
-					const list = await ctx.call("favorites.find", { fields: ["article"], query: { user: users[0]._id } });
+					const list = await ctx.call("favorites.find", { fields: ["article"], query: { user: user[0]._id } });
 					params.query._id = { $in: list.map(o => o.article) };
 				}
 				*/
@@ -263,7 +265,7 @@ module.exports = {
 
 				const list = await ctx.call("follows.find", { fields: ["follow"], query: { user: ctx.meta.user._id.toString() } });
 				const authors = _.uniq(_.compact(_.flattenDeep(list.map(o => o.follow))));
-				params.query.author = { "$in" : authors };
+				params.query.author = { "$in": authors };
 
 				countParams = Object.assign({}, params);
 				// Remove pagination params

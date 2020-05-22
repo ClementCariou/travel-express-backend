@@ -81,7 +81,7 @@ module.exports = {
 			if (token) {
 				// Verify JWT token
 				try {
-					user = await ctx.call("users.resolveToken", { token });
+					user = await ctx.call("user.resolveToken", { token });
 					if (user) {
 						this.logger.info("Authenticated via JWT: ", user.username);
 						// Reduce user fields (it will be transferred to other nodes)

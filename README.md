@@ -24,7 +24,7 @@ You can run multiple instances of services. Moleculer uses TCP transporter to co
 2. Open the http://docker-ip:3000 in your browser
 3. _Optional: Scale up services_
 
-	`docker-compose up -d --scale api=3 --scale articles=2 --scale users=2 --scale comments=2 --scale follows=2 --scale favorites=2`
+	`docker-compose up -d --scale api=3 --scale articles=2 --scale user=2 --scale comments=2 --scale follows=2 --scale favorites=2`
 
 ## Code Overview
 
