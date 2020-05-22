@@ -12,18 +12,19 @@ firstName|First name    |String min 2
 lastName |Last name     |String min 2
 vehicle  |Vehicle model |String optional
 seats    |Seat count    |[1-10]
-baggage  |Size of baggage|[small, medium, big]
+luggageSize|accepted luggage|[small, medium, big]
 talk     |Want to talk  |[no, little, yes]
 smoke    |Allow to smoke|Boolean
+token    |Current JWT   |JWT String
 
 ---
 
 Request|Input|Output
 ---|---|---
 GET /user/:id|user id|user object
-POST /user|mail, tel, password, firstName, lastName|token
-POST /user/login|mail, password|token
-PUT /user/:id|user id and fields to update|
+POST /user|mail, tel, password, firstName, lastName|user object
+POST /user/login|mail, password|user object
+PUT /user/:id|user id and fields to update|user object
 DELETE /user/:id|user id|
 
 Note:
@@ -63,7 +64,7 @@ GET /trip?
     &fromLocation=
     &toLocation=
     &minSeats=        # min val
-    &minBaggages=     # min val
+    &minLuggage=      # min val
     &minTalk=
     &maxTalk=
     &smoke=
