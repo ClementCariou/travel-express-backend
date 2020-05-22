@@ -72,7 +72,7 @@ GET /trip?
 ```
 
 Note :
-- Date time are formated as number of milliseconds since January 1 1970
+- Date time are formated as js Date object
 - Trip are repeated when list/search queried with updated from/to date
 
 ## Reservation
