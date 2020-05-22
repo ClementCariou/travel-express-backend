@@ -44,7 +44,6 @@ repeat      |Frequency     |[no, daily, weekly, monthly]
 endRepeat   |end repeat date|Date time
 
 ```http
-GET /location         # location list
 GET /trip             # list
 GET /trip?...         # search
 GET /trip/:id         # detail
@@ -68,6 +67,8 @@ GET /trip?
     &minTalk=
     &maxTalk=
     &smoke=
+    &page=
+    &pageSize=
 ```
 
 Note :
@@ -91,4 +92,22 @@ GET /reservation/:id        # detail
 POST /reservation           # create [auth]
 PUT /reservation/:id        # update [auth]
 DELETE /reservation/:id     # delete [auth]
+```
+
+Search query with optional fields :
+
+```http
+GET /reservation?
+    tripID=
+    &userID=
+```
+
+## Location
+
+Location query for auto-completion sorted by popularity
+
+```http
+GET /location?
+    search=
+    &limit=
 ```
