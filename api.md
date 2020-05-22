@@ -2,7 +2,7 @@
 
 ## User
 
-Fields   |Description   |Type|Access
+Fields   |Description   |Type|Meta
 ---------|--------------|---|---
 id       |Identifier    |String
 email    |Email address |String mail format
@@ -10,11 +10,11 @@ tel      |Phone number  |String tel format
 password |Hashed password|String min 6 | private
 firstName|First name    |String min 2
 lastName |Last name     |String min 2
-vehicle  |Vehicle model |String optional
-seats    |Seat count    |[1-10]
-luggageSize|accepted luggage|[small, medium, large]
-talk     |Want to talk  |[no, little, yes]
-smoke    |Allow to smoke|Boolean
+vehicle  |Vehicle model |String | default ""
+seats    |Seat count    |[1-10] | default 2
+luggageSize|accepted luggage|[small, medium, large]  | default medium
+talk     |Want to talk  |[no, little, yes] | default yes
+smoke    |Allow to smoke|Boolean | default no
 token    |Current JWT   |JWT String
 
 ---
@@ -28,6 +28,7 @@ PUT /user/:id|user id and fields to update|user object
 DELETE /user/:id|user id|
 
 Note:
+- Phone number regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 - The JSON Web Token has to be passed into the authorization header for the [auth] requests
 
 ## Trip
