@@ -12,7 +12,7 @@ firstName|First name    |String min 2
 lastName |Last name     |String min 2
 vehicle  |Vehicle model |String optional
 seats    |Seat count    |[1-10]
-luggageSize|accepted luggage|[small, medium, big]
+luggageSize|accepted luggage|[small, medium, large]
 talk     |Want to talk  |[no, little, yes]
 smoke    |Allow to smoke|Boolean
 token    |Current JWT   |JWT String
