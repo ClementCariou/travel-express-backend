@@ -61,7 +61,11 @@ module.exports = {
 		create: {
 			rest: "POST /user",
 			params: {
-				user: { type: "object" }
+				email: { type: "email" },
+				tel: { type: "string", regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im },
+				password: { type: "string", min: 6 },
+				firstName: { type: "string", min: 2 },
+				lastName: { type: "string", min: 2 }
 			},
 			async handler(ctx) {
 				let entity = ctx.params.user;
@@ -106,11 +110,9 @@ module.exports = {
 		login: {
 			rest: "POST /user/login",
 			params: {
-				user: {
-					type: "object", props: {
-						email: { type: "email" },
-						password: { type: "string", min: 1 }
-					}
+				type: "object", props: {
+					email: { type: "email" },
+					password: { type: "string", min: 1 }
 				}
 			},
 			async handler(ctx) {
