@@ -198,23 +198,19 @@ module.exports = {
 			auth: "required",
 			rest: "PUT /user",
 			params: {
-				user: {
-					type: "object", props: {
-						email: { type: "email" },
-						tel: { type: "string", regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, optional: true },
-						password: { type: "string", min: 6, optional: true },
-						firstName: { type: "string", min: 2, optional: true },
-						lastName: { type: "string", min: 2, optional: true },
-						vehicle: { type: "string", optional: true },
-						seats: { type: "number", min: 1, max: 10, optional: true },
-						luggageSize: { type: "enum", values: ["small", "medium", "large"], optional: true },
-						talk: { type: "enum", values: ["no", "little", "yes"], optional: true },
-						smoke: { type: "boolean", optional: true }
-					}
-				}
+				email: { type: "email" },
+				tel: { type: "string", regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, optional: true },
+				password: { type: "string", min: 6, optional: true },
+				firstName: { type: "string", min: 2, optional: true },
+				lastName: { type: "string", min: 2, optional: true },
+				vehicle: { type: "string", optional: true },
+				seats: { type: "number", min: 1, max: 10, optional: true },
+				luggageSize: { type: "enum", values: ["small", "medium", "large"], optional: true },
+				talk: { type: "enum", values: ["no", "little", "yes"], optional: true },
+				smoke: { type: "boolean", optional: true }
 			},
 			async handler(ctx) {
-				const newData = ctx.params.user;
+				const newData = ctx.params;
 				if (newData.firstName && newData.lastName) {
 					const found = await this.adapter.findOne({ firstName: newData.firstName, lastName: newData.lastName });
 					if (found && found._id.toString() !== ctx.meta.user._id.toString())
