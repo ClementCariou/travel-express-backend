@@ -19,7 +19,7 @@ module.exports = {
 	 */
 	settings: {
 		rest: "reservation/",
-		fields: ["id", "trip", "user", "seats", "paid"],
+		fields: ["_id", "trip", "user", "seats", "paid"],
 		entityValidator: {
 			seats: { type: "number", min: 1, max: 10 },
 			paid: { type: "boolean" }

@@ -19,7 +19,7 @@ module.exports = {
 	 */
 	settings: {
 		rest: "trip/",
-		fields: ["id", "user", "fromLocation", "fromDate", "toLocation", "toDate", "repeat", "endRepeat"],
+		fields: ["_id", "user", "fromLocation", "fromDate", "toLocation", "toDate", "repeat", "endRepeat"],
 		entityValidator: {
 			fromLocation: { type: "string", min: 2 },
 			fromDate: { type: "date" },
