@@ -5,7 +5,7 @@
 Fields   |Description   |Type|Access
 ---------|--------------|---|---
 id       |Identifier    |String
-mail     |Email address |String mail format
+email    |Email address |String mail format
 tel      |Phone number  |String tel format
 password |Hashed password|String min 6 | private
 firstName|First name    |String min 2
