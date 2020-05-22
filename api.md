@@ -4,7 +4,7 @@
 
 Fields   |Description   |Type|Meta
 ---------|--------------|---|---
-id       |Identifier    |String
+_id      |Identifier    |String
 email    |Email address |String mail format
 tel      |Phone number  |String tel format
 password |Hashed password|String min 6 | private
@@ -40,7 +40,7 @@ Note:
 
 Fields      |Description   |Type 
 ------------|--------------|---
-id          |Identifier    |String
+_id         |Identifier    |String
 user        |Transporter   |User Object
 fromLocation|Starting city |String
 fromDate    |Starting date |Date time
@@ -86,7 +86,7 @@ Note :
 
 Fields      |Description   |Type 
 ------------|--------------|---
-id          |Identifier    |String
+_id         |Identifier    |String
 trip        |Target trip   |Trip Object
 user        |Who reserve   |User Object
 seats       |Amount of seat|[1-10]
