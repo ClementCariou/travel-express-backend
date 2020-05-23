@@ -5,7 +5,7 @@
 Fields   |Description   |Type|Meta
 ---------|--------------|---|---
 _id      |Identifier    |String
-email    |Email address |String mail format
+email    |Email address |String email format
 tel      |Phone number  |String tel format
 password |Hashed password|String min 6 | private
 firstName|First name    |String min 2
@@ -23,8 +23,8 @@ Request|Input|Output|Access
 ---|---|---|---|---
 GET /api/user/:id|user id|user object|public
 GET /api/user||user object|[auth]
-POST /api/user|mail, tel, password, firstName, lastName|user object|public
-POST /api/user/login|mail, password|user object|public
+POST /api/user|email, tel, password, firstName, lastName|user object|public
+POST /api/user/login|email, password|user object|public
 PUT /api/user|fields to update|user object|[auth]
 DELETE /api/user|||[auth]
 GET /api/dev/users||user objects|dev
@@ -47,7 +47,7 @@ fromDate    |Starting date |Date time
 toLocation  |Ending city   |String
 toDate      |Ending date   |Date time
 repeat      |Frequency     |[no, daily, weekly, monthly]
-endRepeat   |end repeat date|Date time
+endRepeat   |end repeat date|Date time optional
 
 ```http
 GET /api/trip             # list
