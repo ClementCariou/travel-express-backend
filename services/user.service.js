@@ -29,7 +29,7 @@ module.exports = {
 
 
 		/** Public fields */
-		fields: ["_id", "email", "tel", "firstName", "lastName", "vehicule", "seats", "luggageSize", "talk", "smoke"],
+		fields: ["_id", "email", "tel", "firstName", "lastName", "vehicle", "seats", "luggageSize", "talk", "smoke"],
 
 		/** Validator schema for entity */
 		entityValidator: {
@@ -198,7 +198,6 @@ module.exports = {
 			auth: "required",
 			rest: "PUT /user",
 			params: {
-				email: { type: "email" },
 				tel: { type: "string", regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, optional: true },
 				password: { type: "string", min: 6, optional: true },
 				firstName: { type: "string", min: 2, optional: true },
@@ -223,11 +222,6 @@ module.exports = {
 						throw new MoleculerClientError("Tel exists!", 422, "", [{ field: "tel", message: "exists" }]);
 				}
 
-				if (newData.email) {
-					const found = await this.adapter.findOne({ email: newData.email });
-					if (found && found._id.toString() !== ctx.meta.user._id.toString())
-						throw new MoleculerClientError("Email exists!", 422, "", [{ field: "email", message: "exists" }]);
-				}
 				newData.updatedAt = new Date();
 				const update = {
 					"$set": newData
