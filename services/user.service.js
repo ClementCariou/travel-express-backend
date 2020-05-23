@@ -68,7 +68,7 @@ module.exports = {
 				lastName: { type: "string", min: 2 }
 			},
 			async handler(ctx) {
-				let entity = ctx.params.user;
+				let entity = ctx.params;
 				await this.validateEntity(entity);
 				if (entity.firstName && entity.lastName) {
 					const found = await this.adapter.findOne({ firstName: entity.firstName, lastName: entity.lastName });
@@ -110,13 +110,11 @@ module.exports = {
 		login: {
 			rest: "POST /user/login",
 			params: {
-				type: "object", props: {
-					email: { type: "email" },
-					password: { type: "string", min: 1 }
-				}
+				email: { type: "email" },
+				password: { type: "string", min: 1 }
 			},
 			async handler(ctx) {
-				const { email, password } = ctx.params.user;
+				const { email, password } = ctx.params;
 
 				const user = await this.adapter.findOne({ email });
 				if (!user)
