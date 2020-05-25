@@ -20,7 +20,7 @@ token    |Current JWT   |JWT String
 ---
 
 Request|Input|Output|Access
----|---|---|---|---
+---|---|---|---
 GET /api/user/:id|user id|user object|public
 GET /api/user|  |user object|[auth]
 POST /api/user|email, tel, password, firstName, lastName|user object|public
