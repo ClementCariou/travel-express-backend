@@ -22,14 +22,14 @@ token    |Current JWT   |JWT String
 Request|Input|Output|Access
 ---|---|---|---|---
 GET /api/user/:id|user id|user object|public
-GET /api/user||user object|[auth]
+GET /api/user|  |user object|[auth]
 POST /api/user|email, tel, password, firstName, lastName|user object|public
 POST /api/user/login|email, password|user object|public
 PUT /api/user|fields to update|user object|[auth]
-DELETE /api/user|||[auth]
+DELETE /api/user|  |  |[auth]
 GET /api/dev/users||user objects|dev
 PUT /api/dev/users/:id|user id, fields to update|user object|dev
-DELETE /api/dev/users/:id|user id||dev
+DELETE /api/dev/users/:id|user id|  |dev
 
 Note:
 - Phone number regex: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
