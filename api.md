@@ -54,7 +54,6 @@ GET /api/trip             # list
 GET /api/trip?...         # search
 GET /api/trip/:id         # detail
 POST /api/trip            # create [auth]
-PUT /api/trip/:id         # update [auth]
 DELETE /api/trip/:id      # delete [auth]
 ```
 
@@ -96,7 +95,7 @@ paid        |Is paid       | Boolean
 GET /api/reservation            # list
 GET /api/reservation/:id        # detail
 POST /api/reservation           # create [auth]
-PUT /api/reservation/:id        # update [auth]
+POST /api/reservation/pay/:id   # pay [auth]
 DELETE /api/reservation/:id     # delete [auth]
 ```
 

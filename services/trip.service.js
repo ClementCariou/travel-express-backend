@@ -2,7 +2,6 @@
 
 const { MoleculerClientError } = require("moleculer").Errors;
 
-const _ = require("lodash");
 const DbService = require("../mixins/db.mixin");
 const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
@@ -32,7 +31,11 @@ module.exports = {
 			toLocation: { type: "string", min: 2 },
 			toDate: { type: "date", convert: true },
 			repeat: { type: "enum", values: ["no", "daily", "weekly", "monthly"] },
-			endRepeat: { type: "date", convert: true, optional: true }
+			endRepeat: { type: "date", convert: true, optional: true },
+			seats: { type: "number", min: 1, max: 10, default: 2 },
+			luggageSize: { type: "enum", values: ["small", "medium", "large"], default: "medium" },
+			talk: { type: "enum", values: ["no", "little", "yes"], default: "yes" },
+			smoke: { type: "boolean", convert: true, default: false }
 		}
 	},
 
@@ -52,16 +55,64 @@ module.exports = {
 				endRepeat: { type: "date", convert: true, optional: true }
 			},
 			async handler(ctx) {
+				const now = new Date();
 				let entity = ctx.params;
 				await this.validateEntity(entity);
-				if (ctx.meta.user.vehicle === "") {
-					throw new MoleculerClientError("Trying to create a trip without a vehicle", 403);
+				if (ctx.params.fromDate < now || ctx.params.toDate < now) {
+					throw new MoleculerClientError("The trip dates are incoherents", 403);
+				}
+				if (ctx.params.toDate < new Date(ctx.params.fromDate.getTime() + 5 * 60 * 1000)) {
+					throw new MoleculerClientError("The trip should be at least 5 minutes long", 403);
+				}
+				if (ctx.params.repeat !== "no" && !ctx.params.endRepeat) {
+					throw new MoleculerClientError("Need to specify the date of end repeat", 403);
+				}
+				if (ctx.params.repeat !== "no" && ctx.params.endRepeat < ctx.params.fromDate + 2) {
+					throw new MoleculerClientError("If the trip repeats it should repeat at least once", 403);
 				}
 				entity.user = ctx.meta.user._id.toString();
+				// Add private fields from the user preferences
+				const { user } = await ctx.call("user.me", { user: entity.user });
+				const { vehicle, smoke, talk, luggageSize, seats } = user;
+				if (!vehicle || vehicle === "") {
+					throw new MoleculerClientError("Trying to create a trip without a vehicle", 403);
+				}
+				entity = { ...entity, smoke, talk, luggageSize, seats };
+				if (ctx.params.repeat !== "no") {
+					const entities = [];
+					while (entity.fromDate <= ctx.params.endRepeat) {
+						entities.push({
+							...entity,
+							fromDate: new Date(entity.fromDate.getTime()),
+							toDate: new Date(entity.toDate.getTime())
+						});
+						switch (ctx.params.repeat) {
+							case "daily":
+								entity.fromDate.setDate(entity.fromDate.getDate() + 1);
+								entity.toDate.setDate(entity.toDate.getDate() + 1);
+								break;
+							case "weekly":
+								entity.fromDate.setDate(entity.fromDate.getDate() + 7);
+								entity.toDate.setDate(entity.toDate.getDate() + 7);
+								break;
+							case "monthly":
+								entity.fromDate.setMonth(entity.fromDate.getMonth() + 1);
+								entity.toDate.setMonth(entity.toDate.getMonth() + 1);
+								break;
+						}
+					}
+					entity = entities;
+				}
 				const doc = await this.adapter.insert(entity);
-				let json = await this.transformDocuments(ctx, { populate: ["user"] }, doc);
-				await this.entityChanged("created", json, ctx);
-				return json;
+				await this.entityChanged("created", doc, ctx);
+				return doc;
+			}
+		},
+
+		update: {
+			rest: "PUT /",
+			handler: () => {
+				throw new MoleculerClientError("Cannot update a trip, please delete and create a new one", 403);
 			}
 		},
 
@@ -86,43 +137,66 @@ module.exports = {
 
 			async handler(ctx) {
 				let query = {};
+				const now = new Date();
 				if (ctx.params.minFromDate || ctx.params.maxFromDate) {
 					query.fromDate = {};
 					if (ctx.params.minFromDate)
-						query.fromDate.$gte = ctx.params.minFromDate;
+						query.fromDate.$gte = Math.max(now, ctx.params.minFromDate);
 					if (ctx.params.maxFromDate)
-						query.fromDate.$lte = ctx.params.maxFromDate;
+						query.fromDate.$lte = Math.max(now, ctx.params.maxFromDate);
 				}
 				if (ctx.params.minToDate || ctx.params.maxToDate) {
 					query.toDate = {};
 					if (ctx.params.minToDate)
-						query.toDate.$gte = ctx.params.minToDate;
+						query.toDate.$gte = Math.max(now, ctx.params.minToDate);
 					if (ctx.params.maxToDate)
-						query.toDate.$lte = ctx.params.maxToDate;
+						query.toDate.$lte = Math.max(now, ctx.params.maxToDate);
 				}
 				if (ctx.params.fromLocation)
 					query.fromLocation = ctx.params.fromLocation;
 				if (ctx.params.toLocation)
 					query.toLocation = ctx.params.toLocation;
-				/*if (typeof ctx.params.minSeats === "number") {
-					query["user.seats"] = { $gte: ctx.params.minSeats };
+				if (typeof ctx.params.minSeats === "number") {
+					query.seats = { $gte: ctx.params.minSeats };
 				}
 				const sizes = ["small", "medium", "large"];
 				if (ctx.params.minLuggage)
-					query.user = { ...query.user, luggageSize: { $in: sizes.slice(sizes.indexOf(ctx.params.minLuggage)) } };
-				const talk = ["no", "little", "yes"];
-				if (ctx.params.mintalk || ctx.params.maxtalk)
-					query.user = { ...query.user, talk: { $in: talk.slice(talk.indexOf(ctx.params.minTalk), talk.indexOf(ctx.params.maxTalk)) } };
+					query.luggageSize = { $in: sizes.slice(sizes.indexOf(ctx.params.minLuggage)) };
+				if (ctx.params.minTalk || ctx.params.maxTalk) {
+					const talk = ["no", "little", "yes"];
+					ctx.params.minTalk = ctx.params.minTalk ? talk.indexOf(ctx.params.minTalk) : 0;
+					ctx.params.maxTalk = ctx.params.maxTalk ? talk.indexOf(ctx.params.maxTalk) + 1 : 3;
+					query.talk = { $in: talk.slice(ctx.params.minTalk, ctx.params.maxTalk) };
+				}
 				if (typeof ctx.params.smoke === "boolean")
-					query["user.smoke"] = ctx.params.smoke;*/
+					query.smoke = ctx.params.smoke;
 				const params = {
 					page: ctx.params.page,
 					pageSize: ctx.params.pageSize,
-					populate: ["user"],
 					query
 				};
 				return await this.adapter.find(params);
-				//return this.transformDocuments(ctx, params, doc);
+			}
+		},
+
+		remove: {
+			auth: "required",
+			rest: "DELETE /:id",
+			async handler(ctx) {
+				const trip = await this.getById(ctx.params.id);
+				if (!trip) {
+					throw new MoleculerClientError("Trip not found.", 403);
+				}
+				if (trip.user !== ctx.meta.user._id) {
+					throw new MoleculerClientError("You cannot delete trips of other users.", 403);
+				}
+				const reservations = await ctx.call("reservation.list", { tripID: trip._id });
+				// Maybe we want to cancel the reservations depending on the trip date
+				// and if so we would need to notify the users which is out of the scope of this project
+				if (reservations.length !== 0) {
+					throw new MoleculerClientError("You cannot delete trips with reservations.", 403);
+				}
+				return await this._remove(ctx, { id: trip._id });
 			}
 		}
 	},

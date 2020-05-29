@@ -157,7 +157,7 @@ module.exports = {
 				});
 
 				if (decoded.id)
-					return this.getById(decoded.id);
+					return await this.getById(decoded.id);
 			}
 		},
 
