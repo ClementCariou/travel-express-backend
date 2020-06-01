@@ -41,17 +41,26 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const trip = await ctx.call("trip.get", { id: ctx.params.trip });
+				if (trip.user === ctx.meta.user._id) {
+					throw new MoleculerClientError("Cannot reserve your own trip.", 403);
+				}
 				const reservations = await ctx.call("reservation.list", { tripID: ctx.params.trip });
-				const reserved = reservations.map((r) => r.seats).reduce((a, b) => a + b);
+				if (reservations.find(r => r.user === ctx.meta.user._id)) {
+					throw new MoleculerClientError("The user already reserved this trip.", 403);
+				}
+				const reserved = reservations.map((r) => r.seats).reduce((a, b) => a + b, 0);
 				if (trip.seats < reserved + ctx.params.seats) {
 					throw new MoleculerClientError("Not enough seats.", 403);
 				}
 				const reservation = {
 					user: ctx.meta.user._id,
 					seats: ctx.params.seats,
+					trip: ctx.params.trip,
 					paid: false
 				};
-				return await this.adapter.insert(reservation);
+				const doc = await this.adapter.insert(reservation);
+				await this.entityChanged("created", doc, ctx);
+				return doc;
 			}
 		},
 		pay: {
@@ -69,11 +78,12 @@ module.exports = {
 					throw new MoleculerClientError("Reservation already paid.", 403);
 				}
 				reservation.paid = true;
-				return await this.adapter.updateById(reservation._id, reservation);
+				const doc = await this.adapter.updateById(reservation._id, reservation);
+				await this.entityChanged("updated", doc, ctx);
+				return doc;
 			}
 		},
 		list: {
-			auth: "required",
 			rest: "GET /",
 			params: {
 				"userID": { type: "string", optional: true },
@@ -84,7 +94,7 @@ module.exports = {
 				if (!ctx.params.userID && !ctx.params.tripID) {
 					throw new MoleculerClientError("Need at least one parameter", 403);
 				}
-				if (!ctx.params.tripID && ctx.params.userID !== ctx.meta.user._id) {
+				if (!ctx.params.tripID && (!ctx.meta.user || ctx.params.userID !== ctx.meta.user._id)) {
 					throw new MoleculerClientError("You cannot fetch reservations informations of other users", 403);
 				}
 				if (ctx.params.userID)
@@ -105,7 +115,7 @@ module.exports = {
 				if (reservation.user !== ctx.meta.user._id) {
 					throw new MoleculerClientError("You cannot delete reservations of other users.", 403);
 				}
-				this._remove(ctx, { id: reservation._id });
+				return this._remove(ctx, { id: reservation._id });
 			}
 		}
 	},
