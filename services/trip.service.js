@@ -141,16 +141,16 @@ module.exports = {
 				if (ctx.params.minFromDate || ctx.params.maxFromDate) {
 					query.fromDate = {};
 					if (ctx.params.minFromDate)
-						query.fromDate.$gte = Math.max(now, ctx.params.minFromDate);
+						query.fromDate.$gte = new Date(Math.max(now, ctx.params.minFromDate));
 					if (ctx.params.maxFromDate)
-						query.fromDate.$lte = Math.max(now, ctx.params.maxFromDate);
+						query.fromDate.$lte = new Date(Math.max(now, ctx.params.maxFromDate));
 				}
 				if (ctx.params.minToDate || ctx.params.maxToDate) {
 					query.toDate = {};
 					if (ctx.params.minToDate)
-						query.toDate.$gte = Math.max(now, ctx.params.minToDate);
+						query.toDate.$gte = new Date(Math.max(now, ctx.params.minToDate));
 					if (ctx.params.maxToDate)
-						query.toDate.$lte = Math.max(now, ctx.params.maxToDate);
+						query.toDate.$lte = new Date(Math.max(now, ctx.params.maxToDate));
 				}
 				if (ctx.params.fromLocation)
 					query.fromLocation = ctx.params.fromLocation;
