@@ -46,6 +46,7 @@ module.exports = {
 				}
 				const reservations = await ctx.call("reservation.list", { tripID: ctx.params.trip });
 				if (reservations.find(r => r.user === ctx.meta.user._id)) {
+					console.log(reservations.find(r => r.user === ctx.meta.user._id));
 					throw new MoleculerClientError("The user already reserved this trip.", 403);
 				}
 				const reserved = reservations.map((r) => r.seats).reduce((a, b) => a + b, 0);
@@ -85,6 +86,7 @@ module.exports = {
 		},
 		list: {
 			rest: "GET /",
+			cache: false, //prod only
 			params: {
 				"userID": { type: "string", optional: true },
 				"tripID": { type: "string", optional: true },
