@@ -61,7 +61,8 @@ Search query with optionnal fields :
 
 ```http
 GET /api/trip?
-    minFromDate=
+    user=
+    &minFromDate=
     &maxFromDate=
     &minToDate=
     &maxToDate=

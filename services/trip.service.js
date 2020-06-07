@@ -120,6 +120,7 @@ module.exports = {
 			rest: "GET /",
 			cache: false, //prod only
 			params: {
+				user: { type: "string", optional: true },
 				minFromDate: { type: "date", optional: true, convert: true },
 				maxFromDate: { type: "date", optional: true, convert: true },
 				minToDate: { type: "date", optional: true, convert: true },
@@ -137,6 +138,8 @@ module.exports = {
 
 			async handler(ctx) {
 				let query = {};
+				if (ctx.params.user)
+					query.user = ctx.params.user;
 				const now = new Date();
 				if (ctx.params.minFromDate || ctx.params.maxFromDate) {
 					query.fromDate = {};
