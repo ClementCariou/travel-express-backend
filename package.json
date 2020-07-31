@@ -1,33 +1,33 @@
 {
-  "name": "travel-backend",
-  "version": "3.0.0",
-  "description": "Travel express backend made with the Moleculer microservice framework.",
-  "scripts": {
-    "dev": "moleculer-runner --repl --hot services",
-    "start": "moleculer-runner",
-    "deps": "npm-check -u",
-    "lint": "eslint services",
-    "docker:build": "docker build -t travel ."
-  },
-  "author": "",
-  "devDependencies": {
-    "eslint": "^6.8.0",
-    "moleculer-repl": "^0.6.2",
-    "npm-check": "^5.9.2"
-  },
-  "dependencies": {
-    "bcryptjs": "2.4.3",
-    "ioredis": "^4.14.1",
-    "jsonwebtoken": "8.5.1",
-    "lodash": "^4.17.15",
-    "moleculer": "0.14.0",
-    "moleculer-db": "0.8.5",
-    "moleculer-db-adapter-mongo": "^0.4.7",
-    "moleculer-web": "0.9.0",
-    "redlock": "^4.1.0",
-    "slug": "^2.1.1"
-  },
-  "engines": {
-    "node": ">= 8.x.x"
-  }
+	"name": "travel-backend",
+	"version": "3.0.0",
+	"description": "Travel express backend made with the Moleculer microservice framework.",
+	"scripts": {
+		"dev": "moleculer-runner --repl --hot services",
+		"start": "moleculer-runner",
+		"deps": "npm-check -u",
+		"lint": "eslint services",
+		"docker:build": "docker build -t travel ."
+	},
+	"author": "",
+	"devDependencies": {
+		"eslint": "^6.8.0",
+		"moleculer-repl": "^0.6.2",
+		"npm-check": "^5.9.2"
+	},
+	"dependencies": {
+		"bcryptjs": "2.4.3",
+		"ioredis": "^4.17.3",
+		"jsonwebtoken": "8.5.1",
+		"lodash": "^4.17.19",
+		"moleculer": "0.14.0",
+		"moleculer-db": "0.8.5",
+		"moleculer-db-adapter-mongo": "^0.4.7",
+		"moleculer-web": "0.9.0",
+		"redlock": "^4.1.0",
+		"slug": "^2.1.1"
+	},
+	"engines": {
+		"node": ">= 8.x.x"
+	}
 }
